@@ -1,0 +1,61 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @company.name %>
+</p>
+
+<%= form_with(model: [@company, @employee], local: true) do |form| %>
+  <% if @company.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@company.errors.count, "error") %> prohibited this company from being saved:</h2>
+
+      <ul>
+      <% @company.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class='form-group'>
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
+  </div>
+
+  <div class='form-group'>
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
+  </div>
+
+  <div class='form-group'>
+    <%= form.label :email %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div class='form-group'>    
+    <%= form.label :area_id %>
+    <%= form.select :area_id, Area.pluck(:name, :id) %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+<h2> Employees: </h2>
+<ul>
+  <% @company.employees.each do |employee| %>
+    <li> 
+      <%= employee.first_name %> 
+      <%= employee.last_name %>
+      <%= employee.email %>
+      <%= Area.find(employee.area_id).name %>
+      <%= link_to "X", company_employee_path(@company, employee), method: :delete %>
+    </li>
+  <% end %>
+</ul>
+
+
+<%= link_to 'Edit', edit_company_path(@company) %> |
+<%= link_to 'Back', companies_path %>
